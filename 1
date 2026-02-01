@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Surprise ❤️</title>
+<style>
+body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    font-family:Arial;
+}
+
+.container{
+    background:white;
+    padding:40px 60px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,.2);
+    z-index:2;
+}
+
+h1{color:#ff2f6d;}
+
+button{
+    padding:12px 28px;
+    font-size:18px;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    position:fixed;
+    transition:.25s;
+    z-index:2;
+}
+
+#yes{background:#ff2f6d;color:white;left:45%;top:55%;}
+#no{background:#ddd;left:55%;top:55%;}
+
+#screen2{display:none;}
+
+.envelope{
+    width:180px;
+    height:120px;
+    background:#ff4f7b;
+    margin:20px auto;
+    position:relative;
+    border-radius:10px;
+}
+
+.envelope:before{
+    content:"";
+    position:absolute;
+    top:-60px;
+    left:0;
+    width:0;
+    height:0;
+    border-left:90px solid transparent;
+    border-right:90px solid transparent;
+    border-bottom:60px solid #ff2f6d;
+}
+
+.heartMsg{
+    display:none;
+    font-size:22px;
+    color:#ff2f6d;
+    margin-top:20px;
+    animation:pop 1s ease;
+}
+
+@keyframes pop{
+    0%{transform:scale(0)}
+    100%{transform:scale(1)}
+}
+
+/* Falling hearts */
+.heartRain{
+    position:fixed;
+    top:-20px;
+    font-size:20px;
+    animation:fall linear infinite;
+    color:rgba(255,255,255,.8);
+    z-index:1;
+}
+
+@keyframes fall{
+    from{transform:translateY(-20px);}
+    to{transform:translateY(110vh);}
+}
+
+#open{background:#ff2f6d;color:white;left:40%;top:75%;}
+#ignore{background:#ccc;left:55%;top:75%;}
+</style>
+</head>
+<body>
+
+<div class="container" id="screen1">
+    <h1>Will you be my Valentine? 💕</h1>
+</div>
+
+<button id="yes">Yes ❤️</button>
+<button id="no">No 😜</button>
+
+<div class="container" id="screen2">
+    <h1>A Love Letter For You 💌</h1>
+    <div class="envelope"></div>
+
+    <div class="heartMsg" id="heartMsg">
+        ❤️ To crush,<br><br>
+        Dear crush, you are so beautiful<br>
+        that every time I see you<br>
+        my world stops 💖
+    </div>
+</div>
+
+<button id="open" style="display:none;">Open 💖</button>
+<button id="ignore" style="display:none;">Ignore 😜</button>
+
+<script>
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+
+const screen1=document.getElementById("screen1");
+const screen2=document.getElementById("screen2");
+
+const openBtn=document.getElementById("open");
+const ignoreBtn=document.getElementById("ignore");
+const heartMsg=document.getElementById("heartMsg");
+
+let lastX=0,lastY=0;
+
+function moveFar(btn){
+    const w=window.innerWidth-120;
+    const h=window.innerHeight-60;
+    let x,y,d;
+    do{
+        x=Math.random()*w;
+        y=Math.random()*h;
+        d=Math.hypot(x-lastX,y-lastY);
+    }while(d<220);
+    lastX=x; lastY=y;
+    btn.style.left=x+"px";
+    btn.style.top=y+"px";
+}
+
+noBtn.onmouseover=noBtn.onclick=()=>moveFar(noBtn);
+ignoreBtn.onmouseover=ignoreBtn.onclick=()=>moveFar(ignoreBtn);
+
+yesBtn.onclick=()=>{
+    screen1.style.display="none";
+    yesBtn.style.display="none";
+    noBtn.style.display="none";
+
+    screen2.style.display="block";
+    openBtn.style.display="block";
+    ignoreBtn.style.display="block";
+};
+
+openBtn.onclick=()=>{
+    openBtn.style.display="none";
+    ignoreBtn.style.display="none";
+    heartMsg.style.display="block";
+};
+
+/* HEART RAIN GENERATOR */
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.className="heartRain";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(2+Math.random()*3)+"s";
+    heart.style.fontSize=(16+Math.random()*20)+"px";
+    document.body.appendChild(heart);
+
+    setTimeout(()=>heart.remove(),5000);
+}
+
+setInterval(createHeart,200);
+</script>
+
+</body>
+</html>
